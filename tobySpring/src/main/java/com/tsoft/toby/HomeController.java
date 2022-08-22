@@ -36,4 +36,10 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value = "/hellospring", method = RequestMethod.GET)
+	public String hellospring(Locale locale, Model model) {
+
+		return "hellospring";
+	}
+	
 }

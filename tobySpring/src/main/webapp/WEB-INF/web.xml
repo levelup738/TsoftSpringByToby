@@ -6,7 +6,10 @@
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
+		<!-- 원래 기본으로 맞춰져있는 context -->
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<!-- 내가 추가한 context -->
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
@@ -15,16 +18,19 @@
 	</listener>
 
 	<!-- Processes application requests -->
+	<!-- 기본적으로 되어있는 dispatcherServlet 설정 -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
+			<!-- 기본으로 지정되어있는 servletContext 설정파일 -->
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 		
+	<!-- 기본적으로 되어있는 urlpattern -->
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
