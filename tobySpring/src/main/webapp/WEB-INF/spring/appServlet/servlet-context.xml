@@ -29,5 +29,8 @@
 	
 	<!-- requestmapping -->
 	<beans:bean name="/hello" class="com.tsoft.toby.HelloController"/>
+	<!-- <beans:bean name="/hello2" class="com.tsoft.toby.ServletControllerTest"/> -->
+	<beans:bean name="/hello2" class="com.tsoft.toby.ServletControllerTest.HelloServlet"/>
+	
 	
 </beans:beans>

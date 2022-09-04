@@ -114,8 +114,14 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
-			<scope>test</scope>
+			<!-- <scope>test</scope> -->
 		</dependency>        
+				<!-- Spring Test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>5.2.9.RELEASE</version>
+		</dependency>  
 	</dependencies>
     <build>
         <plugins>

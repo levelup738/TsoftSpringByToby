@@ -4,5 +4,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="helloSpring" class="com.tsoft.toby.HelloSpring"/>
+	<bean class="com.tsoft.toby.ServletControllerTest.HelloServlet"/>
+	<bean class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter"/>
+	<!-- <bean id="helloSpring" class="com.tsoft.toby.HelloSpring"/>
+	<bean id="helloSpring" class="com.tsoft.toby.HelloSpring"/> -->
+	<bean name ="/hello" class = "springbook...HelloController">
+		<property name = "viewName" value ="WEB-INF/view/specialhello.jsp"/>
+	</bean>
+	
 
 </beans>
