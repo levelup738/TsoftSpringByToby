@@ -9,6 +9,7 @@ public class HelloController407 {
 	@RequestMapping("/hello")
 	public String hello(@RequestParam("name") String name, ModelMap map) {
 		map.put("message", "Hello"+name);
-		return "/WEB-INF/view/hello.jsp";
+		return "/WEB-INF/view/hello.jsp"; 
+		
 	}
 }
