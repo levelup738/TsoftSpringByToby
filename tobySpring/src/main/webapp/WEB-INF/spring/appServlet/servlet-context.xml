@@ -28,9 +28,88 @@
 	<!-- <context:annotation-config/> -->
 	
 	<!-- requestmapping -->
-	<beans:bean name="/hello" class="com.tsoft.toby.HelloController"/>
+	<!-- <beans:bean name="/hello" class="com.tsoft.toby.HelloController"/> -->
 	<!-- <beans:bean name="/hello2" class="com.tsoft.toby.ServletControllerTest"/> -->
-	<beans:bean name="/hello2" class="com.tsoft.toby.ServletControllerTest.HelloServlet"/>
+	<!-- <beans:bean name="/hello2" class="com.tsoft.toby.ServletControllerTest.HelloServlet"/> -->
+	
+	<!-- 2022.09.06 권태민 작성 start-->
+	<!-- 기본적으로 5가지 핸들러 매핑 제공 -->
+	<!-- 1. default BeanNameUrlHandlerMapping -->
+	<!-- ANT 패턴이라고 하는 *나 ** 같은 와일드 카드 사용 가능 -->
+	<!-- <beans:bean name="/s*" class="com.tsoft.toby.HelloController"/> -->
+	
+	<!-- 2. ControllerBeanNameHandlerMapping -->
+	<!-- prefix 지정 가능 -->
+	<!-- controller 상단에 @Componemt("my")와 같은 어노테이션으로 mapping -->
+<!-- 	<beans:bean class="org.springframework.web.servlet.mvc.support.ControllerBeanNameHandlerMapping" >
+		<beans:property name="urlPrefix" value="/kwontem/test" />		
+	</beans:bean> -->
+	
+	<!-- 3. ControllerClassNameHandlerMapping -->
+	<!-- <beans:bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+	<beans:bean class="com.tsoft.toby.ClsNameController"/> -->
+	
+	<!-- 4. SimpleUrlHandlerMapping -->
+	<!-- BeanNameUrlHandlerMapping 의 경우 bean name에 매핑정보를 넣기 때문에 관리하기 불편하다는 단점이 있다.  -->
+	<!-- SimpleUrlHandlerMapping 장점 : 매핑정보가 한곳에 모여있기 때문에 URL 관리가 용이하다. 컨트롤러 개수가 많은 대규모 프로젝트에 용이 -->
+	<!-- SimpleUrlHandlerMapping 단점 : 매핑할 컨트롤러 빈의 이름을 직접 적어줘야 하기 때문에 오타 등의 오류가 발생할 가능성이 있다. -->
+	<!-- 어노테이션을 이용한 매핑방식은 매핑정보를 코드에 가깝게 두지만 매핑정보자체는 흩어져 잇어서 어떤 방식이 더 낫다고 말하기는 어렵다. -->
+	
+	<beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<beans:property name="mappings">
+			<!-- <beans:props>
+				<beans:prop key="/hello">HelloController</beans:prop>
+				<beans:prop key="/simple/**/test">SplUrlController</beans:prop>
+			</beans:props> -->
+			<beans:value>
+				/hello=HelloController
+				/simple/**=SplUrlController		
+			</beans:value>
+		</beans:property>
+	</beans:bean>		
+		
+	<beans:bean id="HelloController" class="com.tsoft.toby.HelloController"/>
+	<beans:bean id="SplUrlController" class="com.tsoft.toby.SplUrlController"/>
+	
+	<!-- 5. DefaultAnnotationHanlderMapping -->
+	<!-- @RequestMapping은 method 단위로 Url을 mapping 해줄수 있어서 controller 갯수를 획기적으로 줄일 수 있다. -->
+	<!-- 심지어는 HTTP 메소드 (GET/POST 등의), HTTP 헤더정보까지 매핑에 활용이 가능하다. -->
+	
+	<!-- 기타 공통 설정 정보 -->
+	
+	<!-- order
+		: 핸들러 매핑은 한개 이상을 동시에 등록 가능하다. 기본적으로 이미 두 개의 핸들러 매핑이 등록되어있다. 
+		  물론 한가지로 통일 하는것이 이상적		    
+	 -->
+	 
+	<!-- defaultHandler
+		: 핸들러 매핑 빈의 defaultHandler 프로퍼티를 지정해두면 URL을 매핑할 대상을 찾지 못했을 경우 자동으로 디폴트 핸들러를 선택해준다.
+		→ 핸들러 매핑에서 매핑할 Controller를 찾지 못하면 HTTP 404 error를 떨군다. 대신 디폴트 핸들러를 지정해 넘기면 친절한 메세지를 보여주는 것이 가능하다. 
+		
+		ex)
+		<beans:bean class="org.springframework.web.servlet.mvc.support.ControllerBeanNameHandlerMapping" >
+			<beans:property name="defaultHandler" ref="defaultController" />		
+		</beans:bean>		    
+	-->
+	
+	<!-- alwaysUseFullPath
+		: URL 매핑은 기본적으로 웹 어플리케이션의 컨텍스트 path(server.xml)과 서블릿 패스 두가지를 제외한 나머지만 가지고 비교한다
+		웹 어플리케이션의 배치 경로와 서블릿 매핑을 변경하더라도 URL 매핑정보가 영햫 받지 않도록 하기 위해
+		하지만 특별한 이유가 있어서 URL전체를 사용해서 컨트롤러를 매핑하기 원한다면 팬들러 매핑 빈의 alwaysUseFullPath 프로퍼티를 true로 선언해주면 된다.
+	 -->
+	 
+	 <!-- detectHandersInAncestorContexts
+	 	설명을 하는 이유는 사용을 권하기 보다는 핸들러 매핑의 동작 방식을 이해하는데 도움이 되기 때문
+	 	일반적으로 servlet context의 부모는 root context 
+	 	자식 컨텍스트의 빈은 부모 컨텍스트의 빈을 참조할 수 있다는 원칙에 따라 루트 컨텍스트에 정의한 DAO나 서비스 계층의 빈을 참조할 수 있다.
+	 	
+	 	하지만 핸들러 매핑의 경우는 다르다. 핸들러 매핑 클래스는 기본적으로 현재 컨텍스트 즉, 서블릿 컨텍스트 안에서맍 매핑할 컨드롤러를 찾는다.
+	 	바로 detectHandersInAncestorContexts 가 false로 선언되어 있기 때문
+	 	웹 환경에 종속적인 컨트롤러 빈은 서블릿 컨텍스트에만 두는 것이 바람직하기 때문이다.
+	 	그런데 detectHandersInAncestorContexts를 강제로 true로 바꿔주면 부모컨텍스트 까지 뒤져서 매핑 대상 컨트롤러를 찾게 할 수는 있다.
+	 	...절대 사용하지 말자...
+	 	단지 컨트롤러를 루트 컨텍스트에 올바르게 선언해놓고 스프링이 컨트롤러를 찾지 못한다고 불평하는 바보는 없기 바란다. 
+	  -->	
 	
 	
 </beans:beans>

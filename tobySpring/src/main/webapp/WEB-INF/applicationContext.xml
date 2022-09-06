@@ -8,9 +8,9 @@
 	<bean class="org.springframework.web.servlet.handler.SimpleServletHandlerAdapter"/>
 	<!-- <bean id="helloSpring" class="com.tsoft.toby.HelloSpring"/>
 	<bean id="helloSpring" class="com.tsoft.toby.HelloSpring"/> -->
-	<bean name ="/hello" class = "springbook...HelloController">
+<!-- 	<bean name ="/hello" class = "springbook...HelloController">
 		<property name = "viewName" value ="WEB-INF/view/specialhello.jsp"/>
-	</bean>
+	</bean> -->
 	
 
 </beans>
