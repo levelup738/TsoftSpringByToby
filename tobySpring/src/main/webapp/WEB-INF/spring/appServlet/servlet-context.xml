@@ -55,18 +55,18 @@
 	<!-- SimpleUrlHandlerMapping 단점 : 매핑할 컨트롤러 빈의 이름을 직접 적어줘야 하기 때문에 오타 등의 오류가 발생할 가능성이 있다. -->
 	<!-- 어노테이션을 이용한 매핑방식은 매핑정보를 코드에 가깝게 두지만 매핑정보자체는 흩어져 잇어서 어떤 방식이 더 낫다고 말하기는 어렵다. -->
 	
-	<beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+<!-- 	<beans:bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<beans:property name="mappings">
-			<!-- <beans:props>
+			<beans:props>
 				<beans:prop key="/hello">HelloController</beans:prop>
 				<beans:prop key="/simple/**/test">SplUrlController</beans:prop>
-			</beans:props> -->
+			</beans:props>
 			<beans:value>
 				/hello=HelloController
 				/simple/**=SplUrlController		
 			</beans:value>
 		</beans:property>
-	</beans:bean>		
+	</beans:bean> -->		
 		
 	<beans:bean id="HelloController" class="com.tsoft.toby.HelloController"/>
 	<beans:bean id="SplUrlController" class="com.tsoft.toby.SplUrlController"/>
@@ -110,6 +110,29 @@
 	 	...절대 사용하지 말자...
 	 	단지 컨트롤러를 루트 컨텍스트에 올바르게 선언해놓고 스프링이 컨트롤러를 찾지 못한다고 불평하는 바보는 없기 바란다. 
 	  -->	
+	  
+	<!-- 2022.09.19 / 3.3.3 - 핸들러 인터셉터 -->
+	<!-- 1. preHandle : 컨트롤러 호출 이전에 실행  / handler 파라미터는 핸들러 매칭이 찾아준 컨트롤러 빈 오브젝트이다. -->
+	<!-- preHandle은 등록된 순서대로 실행된다. -->
+	<!-- 2. postHandle : 컨트롤러 실행후 MAV타입의 정보가 제동돼서 컨트롤러 작업 결과를 참조하거나 조작 가능 / pre 에서 false 리턴했을 경우 postHandle 작동 x -->
+	<!-- 3. afterCompletion : 모든 뷰에서 최종 결과를 생성하는 일을 포함한 모든 작업이 완료된 후에 실행된다. -->
+	<!-- postHandle과 aferCompletion은 preHandle이 실행된 순서와 반대로 실행 된다. -->
+	<!-- 아래와 같이 설정 필요 핸들러 인터셉터는 핸들러 매핑 단위로 등록된다. 핸들러 매핑 빈마다 반복적으로 등록해줘야 한다. -->
+	<!-- 그런데 스프링 3.0에서는 핸들러 인터센터를 URL 패턴을 이용해서 모든 핸들러 매핑에 일괄 적용하는 기능이 추가 됐다. -> 4장 -->
+	<!-- 서블릿 필터를 사용할지 핸들러 인터셉터를 사용할지 신중하게 선택 필요하다. -->
+	
+
+	  <beans:bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" >
+	  	<beans:property name="intercetors">
+	  		<beans:list>
+	  			<beans:ref bean="simpleInterceptor" />
+	  			<beans:ref bean="eventInterceptor" />
+	  		</beans:list>	  		
+	  	</beans:property>
+	  </beans:bean>
+	  
+	  <beans:bean id="simpleInterceptor" class="..." />
+	  <beans:bean id="eventInterceptor" class="..." />
 	
 	
 </beans:beans>
