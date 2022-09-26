@@ -121,7 +121,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>5.2.9.RELEASE</version>
-		</dependency>  
+		</dependency>
+		<!--Marshallingview 위한 추가-->
+		<dependency>
+   			<groupId>org.springframework</groupId>
+   			<artifactId>spring-oxm</artifactId>
+   		<version>4.3.10.RELEASE</version>
+</dependency>  
 	</dependencies>
     <build>
         <plugins>
