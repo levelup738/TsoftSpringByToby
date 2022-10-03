@@ -125,8 +125,8 @@
 	  <beans:bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" >
 	  	<beans:property name="intercetors">
 	  		<beans:list>
-	  			<beans:ref bean="simpleInterceptor" />
-	  			<beans:ref bean="eventInterceptor" />
+	  			<!-- <beans:ref bean="simpleInterceptor" />
+	  			<beans:ref bean="eventInterceptor" /> -->
 	  		</beans:list>	  		
 	  	</beans:property>
 	  </beans:bean>
@@ -134,5 +134,11 @@
 	  <beans:bean id="simpleInterceptor" class="..." />
 	  <beans:bean id="eventInterceptor" class="..." />
 	
-	
+	<!-- 마샬링뷰 설정위한 추가 bean -->
+	<beans:bean id ="helloMarshallingView"
+		class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<beans:property name="marshaller" ref="marshaller" />
+		<!-- 컨트롤러가 리턴한 모델에서 어떤 이름의 오브젝트에 마샬러 적용할지 지정해준다 -->
+		<beans:property name="modelKey" value="info" />  
+    </beans:bean>
 </beans:beans>
